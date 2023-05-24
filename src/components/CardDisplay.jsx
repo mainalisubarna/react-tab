@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
 
-const CardItem = ({products}) => {
+const CardItem = ({products,handleEditButton,handleDeleteButton}) => {
   return (
     <>
       <div className="d-flex flex-wrap justify-content-evenly m-1">
@@ -13,7 +13,8 @@ const CardItem = ({products}) => {
               <Card.Body>
                 <Card.Title>{prod.title}</Card.Title>
                 <Card.Text>{prod.description.length > 62 ? prod.description.slice(0, 62) + '...' : prod.description}</Card.Text>
-                <Button variant="primary">View product</Button>
+                <Button variant="primary" className='btn btn-sm m-1' onClick={(e)=>handleEditButton(e,prod)}>Edit Button</Button>
+                <Button variant="danger" className='btn btn-sm' onClick={(e)=>handleDeleteButton(e,prod)}>Delete Button</Button>
               </Card.Body>
             </Card>
           );
