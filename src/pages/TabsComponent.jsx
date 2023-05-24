@@ -6,6 +6,8 @@ import CardDisplay from '../components/CardDisplay';
 import UsersLister from '../components/UsersLister';
 import PostsLister from '../components/PostsLister';
 import EditModal from '../components/EditModal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const TabsComponent = () => {
   const [key, setKey] = useState("products");
@@ -17,7 +19,7 @@ const TabsComponent = () => {
 
   useEffect(()=>{
     async function getData(){
-    const response = await axios.get("https://dummyjson.com/"+ key);
+    const response = await axios.get('https://dummyjson.com/'+ key);
     return response;  
   }
 
@@ -40,15 +42,25 @@ const TabsComponent = () => {
   }
 
   const handleClose = (e) =>{
-    e.preventDefault();
     setShow(false);
   }
 
   const handleDeleteButton = (e,item) =>{
+    e.preventDefault();
     const newDataDel = products.filter((value)=>{
       return item.id !== value.id && value
     })
     setProducts(newDataDel);
+    toast.success('Data Deleted Sucessfully!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
   }
 
   const handleEditChanges = (e) =>{
@@ -58,6 +70,16 @@ const TabsComponent = () => {
     })
     setProducts(newAllData);
     setShow(false);
+    toast.success('Data Edited Sucessfully!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
   }
 
   const changeHandler = (e) =>{
@@ -71,6 +93,18 @@ const TabsComponent = () => {
 
   return (
     <>
+    <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="colored"
+/>
 <Tabs
       defaultActiveKey={key}
       onSelect={(k) => setKey(k)}
@@ -87,7 +121,7 @@ const TabsComponent = () => {
       </Tab>
     </Tabs>
     <EditModal 
-    show={show} handleClose={handleClose} editValue={editValue} changeHandler={changeHandler} handleEditChanges={handleEditChanges} setShow={setShow}/>
+    show={show} handleClose={handleClose} editValue={editValue} changeHandler={changeHandler} handleEditChanges={handleEditChanges}/>
     </>
   );
 }
