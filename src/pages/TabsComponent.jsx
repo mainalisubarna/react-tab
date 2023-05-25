@@ -8,6 +8,7 @@ import PostsLister from '../components/PostsLister';
 import EditModal from '../components/EditModal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AddModal from '../components/AddModal';
 
 const TabsComponent = () => {
   const [key, setKey] = useState("products");
@@ -15,7 +16,9 @@ const TabsComponent = () => {
   const [users,setUsers] = useState([]);
   const [posts,setPosts] = useState([]);
   const [show, setShow] = useState(false);
-  const [editValue, setEditValue] = useState({})
+  const [editValue, setEditValue] = useState({});
+  const [addShow,setAddShow] = useState(false);
+  const [newProduct , setNewProduct] = useState({});
 
   useEffect(()=>{
     async function getData(){
@@ -41,8 +44,12 @@ const TabsComponent = () => {
     setEditValue(item);
   }
 
-  const handleClose = (e) =>{
+  const handleClose = () =>{
     setShow(false);
+  }
+
+  const handleAddClose = () =>{
+    setAddShow(false);
   }
 
   const handleDeleteButton = (e,item) =>{
@@ -52,6 +59,22 @@ const TabsComponent = () => {
     })
     setProducts(newDataDel);
     toast.success('Data Deleted Sucessfully!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  }
+
+  const handleAddProduct = (e) =>{
+    e.preventDefault();
+    products.unshift(newProduct);
+    setAddShow(false);
+    toast.success('Data Added Sucessfully!', {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -82,6 +105,15 @@ const TabsComponent = () => {
       });
   }
 
+  const addChangeHandler = (e) =>{
+    e.preventDefault();
+    const newItem = {
+      ...newProduct,
+      [e.target.name]:e.target.value,
+      id: products.length + 1
+    }
+    setNewProduct(newItem);
+  }
   const changeHandler = (e) =>{
     e.preventDefault();
     const newData = {
@@ -89,6 +121,11 @@ const TabsComponent = () => {
       [e.target.name]:e.target.value
     }
     setEditValue(newData);
+  }
+
+  const handleAddShow =(e)=>{
+    e.preventDefault();
+    setAddShow(true);
   }
 
   return (
@@ -111,6 +148,7 @@ theme="colored"
       className="mb-3"
     >
       <Tab eventKey="products" title="Products">
+        <button className='btn btn-primary m-2' onClick={handleAddShow}>Add Products</button>
        {products && products.length > 0 && <CardDisplay products={products} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton}/>}
       </Tab>
       <Tab eventKey="users" title="Users">
@@ -122,6 +160,7 @@ theme="colored"
     </Tabs>
     <EditModal 
     show={show} handleClose={handleClose} editValue={editValue} changeHandler={changeHandler} handleEditChanges={handleEditChanges}/>
+    <AddModal show={addShow} handleAddClose={handleAddClose} handleAddProduct={handleAddProduct} addChangeHandler={addChangeHandler}/>
     </>
   );
 }
