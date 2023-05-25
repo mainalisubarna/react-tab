@@ -59,7 +59,7 @@ const TabsComponent = () => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "colored",
+      theme: "light",
       });
   }
 
@@ -78,7 +78,7 @@ const TabsComponent = () => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "colored",
+      theme: "light",
       });
   }
 
@@ -88,7 +88,7 @@ const TabsComponent = () => {
       ...editValue,
       [e.target.name]:e.target.value
     }
-    setEditValue(newData)
+    setEditValue(newData);
   }
 
   return (
