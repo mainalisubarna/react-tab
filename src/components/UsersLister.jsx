@@ -9,33 +9,31 @@ const UsersLister = ({ users }) => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                    {
-                        columnName.map((name,index)=>{
-                            return(
-                                <th key={index}>{name.toUpperCase()}</th>
-                            )
-                        })
-                    }
+                        {
+                            columnName.map((name) => {
+                                return (
+                                    <th key={name}>{name.toUpperCase()}</th>
+                                )
+                            })
+                        }
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        users.map((user,index)=>{
+                        users.map((user) => {
                             rowValue = Object.values(user);
-                            return(
-                                
-                                    <tr key={index}>
-                                        {
-                                            rowValue.map((rowData)=>{
-                                                return(
-                                                    
-                                                        <td key={rowData.id}>{typeof rowData ==='object' ? JSON.stringify(rowData) : rowData}</td>
-                                                    
-                                                )
-                                            })
-                                        }
-                                    </tr>
-                                
+                            return (
+                                <tr key={user.id}>
+                                    {
+                                        rowValue.map((rowData, index) => {
+                                            return (
+
+                                                <td key={index}>{typeof rowData === 'object' ? JSON.stringify(rowData) : rowData}</td>
+
+                                            )
+                                        })
+                                    }
+                                </tr>
                             )
                         })
                     }

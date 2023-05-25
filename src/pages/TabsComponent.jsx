@@ -9,52 +9,55 @@ import EditModal from '../components/EditModal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddModal from '../components/AddModal';
+import EditModalPost from '../components/EditModalPost';
 
 const TabsComponent = () => {
   const [key, setKey] = useState("products");
-  const [products,setProducts] = useState([]);
-  const [users,setUsers] = useState([]);
-  const [posts,setPosts] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [show, setShow] = useState(false);
   const [editValue, setEditValue] = useState({});
-  const [addShow,setAddShow] = useState(false);
-  const [newProduct , setNewProduct] = useState({});
+  const [addShow, setAddShow] = useState(false);
+  const [newProduct, setNewProduct] = useState({});
+  const [editPost, setEditPost] = useState({});
+  const [showEditPostModal, setShowEditPostModal] = useState(false);
 
-  useEffect(()=>{
-    async function getData(){
-    const response = await axios.get('https://dummyjson.com/'+ key);
-    return response;  
-  }
-
-
-  getData().then((values)=>{
-    if(key === 'products'){
-      setProducts(values.data.products);
-    }else if(key === 'users'){
-      setUsers(values.data.users);
-    }else if(key === 'posts'){
-      setPosts(values.data.posts);
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get('https://dummyjson.com/' + key);
+      return response;
     }
-  })
-  },[key])
 
-  const handleEditButton = (e,item) =>{
+
+    getData().then((values) => {
+      if (key === 'products') {
+        setProducts(values.data.products);
+      } else if (key === 'users') {
+        setUsers(values.data.users);
+      } else if (key === 'posts') {
+        setPosts(values.data.posts);
+      }
+    })
+  }, [key])
+
+  const handleEditButton = (e, item) => {
     e.preventDefault();
     setShow(true);
     setEditValue(item);
   }
 
-  const handleClose = () =>{
+  const handleClose = () => {
     setShow(false);
   }
 
-  const handleAddClose = () =>{
+  const handleAddClose = () => {
     setAddShow(false);
   }
 
-  const handleDeleteButton = (e,item) =>{
+  const handleDeleteButton = (e, item) => {
     e.preventDefault();
-    const newDataDel = products.filter((value)=>{
+    const newDataDel = products.filter((value) => {
       return item.id !== value.id && value
     })
     setProducts(newDataDel);
@@ -67,10 +70,10 @@ const TabsComponent = () => {
       draggable: true,
       progress: undefined,
       theme: "light",
-      });
+    });
   }
 
-  const handleAddProduct = (e) =>{
+  const handleAddProduct = (e) => {
     e.preventDefault();
     products.unshift(newProduct);
     setAddShow(false);
@@ -83,12 +86,12 @@ const TabsComponent = () => {
       draggable: true,
       progress: undefined,
       theme: "light",
-      });
+    });
   }
 
-  const handleEditChanges = (e) =>{
+  const handleEditChanges = (e) => {
     e.preventDefault();
-    const newAllData = products.map((item)=>{
+    const newAllData = products.map((item) => {
       return item.id === editValue.id ? editValue : item
     })
     setProducts(newAllData);
@@ -102,65 +105,121 @@ const TabsComponent = () => {
       draggable: true,
       progress: undefined,
       theme: "light",
-      });
+    });
   }
 
-  const addChangeHandler = (e) =>{
+  const addChangeHandler = (e) => {
     e.preventDefault();
     const newItem = {
       ...newProduct,
-      [e.target.name]:e.target.value,
+      [e.target.name]: e.target.value,
       id: products.length + 1
     }
     setNewProduct(newItem);
   }
-  const changeHandler = (e) =>{
+  const changeHandler = (e) => {
     e.preventDefault();
     const newData = {
       ...editValue,
-      [e.target.name]:e.target.value
+      [e.target.name]: e.target.value
     }
     setEditValue(newData);
   }
 
-  const handleAddShow =(e)=>{
+  const handleAddShow = (e) => {
     e.preventDefault();
     setAddShow(true);
   }
 
+
+  const deleteButtonPost = (e, item) => {
+    e.preventDefault();
+    const newPostData = posts.filter((value) => {
+      return item.id !== value.id && item
+    })
+    setPosts(newPostData);
+    toast.success('Data Deleted Sucessfully!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+  const editButtonPost = (e, item) => {
+    e.preventDefault();
+    setEditPost(item);
+    setShowEditPostModal(true)
+  }
+
+  const handlePostModalClose = (e) => {
+    setShowEditPostModal(false);
+  }
+
+  const changeHandlerPost = (e) => {
+    e.preventDefault();
+    const newPostData = {
+      ...editPost,
+      [e.target.name]:e.target.value
+    }
+    setEditPost(newPostData);
+  }
+  const handleEditPostChanges = (e) => {
+    e.preventDefault();
+    const newEditedData = posts.map((value)=>{
+      return value.id === editPost.id ? editPost : value
+    })
+    setPosts(newEditedData);
+    setShowEditPostModal(false);
+    toast.success('Data Edited Sucessfully!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+
   return (
     <>
-    <ToastContainer
-position="top-right"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="colored"
-/>
-<Tabs
-      defaultActiveKey={key}
-      onSelect={(k) => setKey(k)}
-      className="mb-3"
-    >
-      <Tab eventKey="products" title="Products">
-        <button className='btn btn-primary m-2' onClick={handleAddShow}>Add Products</button>
-       {products && products.length > 0 && <CardDisplay products={products} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton}/>}
-      </Tab>
-      <Tab eventKey="users" title="Users">
-        {users && users.length > 0 && <UsersLister users={users}/>}
-      </Tab>
-      <Tab eventKey="posts" title="Posts">
-        {posts && posts.length > 0 && <PostsLister posts={posts} />}
-      </Tab>
-    </Tabs>
-    <EditModal 
-    show={show} handleClose={handleClose} editValue={editValue} changeHandler={changeHandler} handleEditChanges={handleEditChanges}/>
-    <AddModal show={addShow} handleAddClose={handleAddClose} handleAddProduct={handleAddProduct} addChangeHandler={addChangeHandler}/>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      <Tabs
+        defaultActiveKey={key}
+        onSelect={(k) => setKey(k)}
+        className="mb-3"
+      >
+        <Tab eventKey="products" title="Products">
+          <button className='btn btn-primary m-2' onClick={handleAddShow}>Add Products</button>
+          {products && products.length > 0 && <CardDisplay products={products} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />}
+        </Tab>
+        <Tab eventKey="users" title="Users">
+          {users && users.length > 0 && <UsersLister users={users} />}
+        </Tab>
+        <Tab eventKey="posts" title="Posts">
+          {posts && posts.length > 0 && <PostsLister posts={posts} editButtonPost={editButtonPost} deleteButtonPost={deleteButtonPost} />}
+        </Tab>
+      </Tabs>
+      <EditModalPost editValue={editPost} show={showEditPostModal} handleClose={handlePostModalClose} handleEditPostChanges={handleEditPostChanges} changeHandlerPost={changeHandlerPost} />
+      <EditModal
+        show={show} handleClose={handleClose} editValue={editValue} changeHandler={changeHandler} handleEditChanges={handleEditChanges} />
+      <AddModal show={addShow} handleAddClose={handleAddClose} handleAddProduct={handleAddProduct} addChangeHandler={addChangeHandler} />
     </>
   );
 }
