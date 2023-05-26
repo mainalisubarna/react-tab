@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Table from 'react-bootstrap/Table';
+import TabComponentContext from '../Context/TabComponentContext';
 
-const PostsLister = ({ posts ,editButtonPost,deleteButtonPost}) => {
+const PostsLister = ({editButtonPost,deleteButtonPost}) => {
+  const {posts} = useContext(TabComponentContext);
   const columnName = Object.keys(posts[0]);
   return (
     <Table striped bordered hover>

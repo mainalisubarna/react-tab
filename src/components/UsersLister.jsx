@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Table from 'react-bootstrap/Table';
+import TabComponentContext from '../Context/TabComponentContext';
 
-const UsersLister = ({ users }) => {
+const UsersLister = () => {
+    const {users} = useContext(TabComponentContext);
     const columnName = Object.keys(users[0]);
     let rowValue = [];
     return (

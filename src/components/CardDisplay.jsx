@@ -1,8 +1,10 @@
+import { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import TabComponentContext from '../Context/TabComponentContext';
 
-
-const CardItem = ({products,handleEditButton,handleDeleteButton}) => {
+const CardItem = ({handleEditButton,handleDeleteButton}) => {
+  const {products} = useContext(TabComponentContext);
   return (
     <>
       <div className="d-flex flex-wrap justify-content-evenly m-1">
